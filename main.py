@@ -15,7 +15,8 @@ BACK_BLACK = (5, 5, 5)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 SKY = (8, 37, 112)
-FOG = (206, 209, 222)
+FOG = pygame.Color(206, 209, 222, 50)
+#pygame.Color.update(FOG, 206, 209, 222, 50)
 
 
 PI = math.pi
@@ -61,6 +62,58 @@ class Fog:
                         [self.x-150, self.y, self.x+250, self.y],
                         0, PI, 50)
 
+class Bat:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def draw_bat(self):
+        for num in range(10):
+            pygame.draw.arc(screen, BLACK,
+                        [self.x, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+                        0, PI-0.5, 5)
+            pygame.draw.arc(screen, BLACK,
+                        [self.x+25, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+                        0, PI, 5)
+            pygame.draw.arc(screen, BLACK,
+                        [self.x+50, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+                        0.5, PI, 5)
+            pygame.draw.arc(screen, BLACK,
+                        [self.x+100, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+                        0, PI-0.5, 5)
+            pygame.draw.arc(screen, BLACK,
+                        [self.x+125, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+                        0, PI, 5)
+            pygame.draw.arc(screen, BLACK,
+                        [self.x+150, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+                        0.5, PI, 5)
+
+        pygame.draw.circle(screen, BLACK,
+                           (self.x+90, self.y), 25)
+        pygame.draw.circle(screen, BLACK,
+                           (self.x+90, self.y-30), 20)
+        pygame.draw.polygon(screen, BLACK,
+                            [(self.x, self.y+5), (self.x+50, self.y-20),
+                            (self.x+100, self.y+5)])
+        pygame.draw.polygon(screen, BLACK,
+                            [(self.x+100, self.y+5), (self.x+130, self.y-20),
+                            (self.x+175, self.y+5)])
+        pygame.draw.polygon(screen, BLACK,
+                            [(self.x+75, self.y-40),
+                            (self.x+80, self.y-55),
+                            (self.x+95, self.y-50)])
+        pygame.draw.polygon(screen, BLACK,
+                            [(self.x+90, self.y-50),
+                            (self.x+100, self.y-55),
+                            (self.x+105, self.y-40)])
+        pygame.draw.circle(screen, RED,
+                           (self.x+85, self.y-35), 4)
+        pygame.draw.circle(screen, RED,
+                           (self.x+95, self.y-35), 4)
+    def move_bat(self):
+        self.y-=3
+        if self.y <= 0:
+            self.y = 1000
 pygame.init()
 
 screen = pygame.display.set_mode(SIZE)
@@ -71,13 +124,22 @@ clock = pygame.time.Clock()
 running = True
 
 
-trees = [Tree(random.randint(-100, 900), random.randint(0, 200), BLACK)
-         for num in range(10)]
+trees1 = [Tree(random.randint(-100, 250), random.randint(0, 200), BLACK)
+         for num in range(5)]
 
-background_trees = [Tree(random.randint(-100, 900), random.randint(0, 100), BACK_BLACK)
-         for num in range(10)]
+background_trees1 = [Tree(random.randint(-100, 250), random.randint(0, 100), BACK_BLACK)
+         for num in range(5)]
+
+trees2 = [Tree(random.randint(600, 1000), random.randint(0, 200), BLACK)
+         for num in range(5)]
+
+background_trees2 = [Tree(random.randint(600, 1000), random.randint(0, 100), BACK_BLACK)
+         for num in range(5)]
 
 fog = Fog(200, 300, FOG)
+
+bat = Bat(400, 1000)
+
 
 while running:
     for event in pygame.event.get():
@@ -87,12 +149,22 @@ while running:
     screen.fill(SKY)
     pygame.draw.rect(screen, GROUND_BLACK, [0, 450, 1000, 800])
 
-    for tree in background_trees:
+    for tree in background_trees1:
         tree.draw_tree()
-    for tree in trees:
+    for tree in trees1:
         tree.draw_tree()
 
-    fog.draw_fog()
+    for tree in background_trees2:
+        tree.draw_tree()
+    for tree in trees2:
+        tree.draw_tree()
+
+    #fog.draw_fog()
+
+
+
+    bat.draw_bat()
+    bat.move_bat()
 
     pygame.display.flip()
 
