@@ -23,6 +23,8 @@ x_right = 10
 y_up = 10
 y_down = 10
 font = pygame.font.SysFont('Times', 25, True, False)
+font2 = pygame.font.SysFont('Times', 100, True, False)
+
 
 PI = math.pi
 
@@ -60,22 +62,12 @@ class Tree:
                           (self.x+100, self.y+675),
                           (self.x+50, self.y+675)])
 
-class Fog:
-    def __init__(self, x, y, color):
-        self.x = x
-        self.y = y
-        self.color = color
-
-    def draw_fog(self):
-        pygame.draw.arc(screen, self.color,
-                        [self.x-150, self.y, self.x+250, self.y],
-                        0, PI, 50)
-
 class Bat:
-    def __init__(self, x, y, width, score=0):
+    def __init__(self, x, y, width, score_add, score=0):
         self.x = x
         self.y = y
         self.width = width
+        self.score_add = score_add
         self.score = score
 
     def draw_bat(self):
@@ -151,7 +143,7 @@ class Fire_Fly:
         self.x += self.speed
 
         if 0 < self.y < display_height:
-            self.speed = random.randint(-5, 7)
+            self.speed = random.randint(-5, 12)
         self.y += self.speed
         if self.x < 0:
             self.x += 10
@@ -160,14 +152,53 @@ class Fire_Fly:
         if self.y < 0:
             self.y += 10
         if self.y > display_height:
-            self.y -= 10
+            self.x = random.randint(0, 1000)
+            self.y = 0
+
+# class Fire_Fly:
+#     def __init__(self, x, y, color, width, speed=0):
+#         self.x = x
+#         self.y = y
+#         self.color = color
+#         self.width = width
+#         self.speed = speed
+#
+#     def draw_fly(self):
+#         pygame.draw.circle(screen, self.color,
+#                            (self.x, self.y), self.width)
+#     def move_fly(self):
+#         if 0 < self.x < display_width:
+#             self.speed = random.randint(-5, 5)
+#         self.x += self.speed
+#
+#         if 0 < self.y < display_height:
+#             self.speed = random.randint(-5, 12)
+#         self.y += self.speed
+#         if self.x < 0:
+#             self.x += 10
+#         if self.x > display_width:
+#             self.x -= 10
+#         if self.y < 0:
+#             self.y += 10
+#         if self.y > display_height:
+#             self.x = random.randint(0, 1000)
+#             self.y = 0
 
 class Score:
-    def __init__(self):
-        pass
+    def __init__(self, time):
+        self.time = time
+
     def draw_score(self, other):
-        font.render(f"Score = {other.score}", True, WHITE)
+        text = font.render(f"Score = {other.score}", True, WHITE)
         screen.blit(text, (50, 25))
+
+    def draw_game_over(self):
+        game_over = font2.render("GAME OVER", True, RED)
+        screen.blit(game_over, (150, 300))
+
+    def draw_time(self):
+        timer = font.render(f"Time = {self.time}", True, WHITE)
+        screen.blit(timer, (50, 50))
 
 
 
@@ -212,8 +243,6 @@ trees2 = [Tree(random.randint(600, 1000), random.randint(0, 200), BLACK)
 background_trees2 = [Tree(random.randint(600, 1000), random.randint(0, 100), BACK_BLACK)
          for num in range(5)]
 
-fog = Fog(200, 300, FOG)
-
 bat = Bat(400, 1000,175)
 
 moon = Moon(200, 300, 1)
@@ -224,7 +253,7 @@ for i in range(10):
     random_y = random.randrange(100, 300, 5)
     fly_list.append(Fire_Fly(x_cord, random_y, FLY, 5))
 
-score = Score()
+
 
 text = font.render(f"Score = {bat.score}", True, WHITE)
 
@@ -244,7 +273,7 @@ while running:
 
     screen.fill(SKY)
     pygame.draw.rect(screen, GROUND_BLACK, [0, 450, 1000, 800])
-
+    score = Score(pygame.time.get_ticks())
     #eyes.draw_eyes()
     #eyes.move_eyes_right()
 
@@ -270,6 +299,10 @@ while running:
     bat.draw_bat()
 
     score.draw_score(bat)
+    score.draw_time()
+    if int(score.time) > 3000:
+        score.draw_game_over()
+
 
     pygame.display.flip()
 
