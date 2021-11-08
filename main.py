@@ -64,64 +64,63 @@ class Tree:
                           (self.x+50, self.y+675)])
 
 class Bat:
-    def __init__(self, x, y, width, score_add, score_sub, score=0):
+    def __init__(self, display, x, y, width, score_add, score_sub, img, score=0):
+        self.display = display
         self.x = x
         self.y = y
         self.width = width
         self.score_add = score_add
         self.score_sub = score_sub
+        self.img = img
         self.score = score
 
     def draw_bat(self):
-        for num in range(10):
-            pygame.draw.arc(screen, BLACK,
-                        [self.x, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
-                        0, PI-0.5, 5)
-            pygame.draw.arc(screen, BLACK,
-                        [self.x+25, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
-                        0, PI, 5)
-            pygame.draw.arc(screen, BLACK,
-                        [self.x+50, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
-                        0.5, PI, 5)
-            pygame.draw.arc(screen, BLACK,
-                        [self.x+100, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
-                        0, PI-0.5, 5)
-            pygame.draw.arc(screen, BLACK,
-                        [self.x+125, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
-                        0, PI, 5)
-            pygame.draw.arc(screen, BLACK,
-                        [self.x+150, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
-                        0.5, PI, 5)
-
-        pygame.draw.circle(screen, BLACK,
-                           (self.x+90, self.y), 25)
-        pygame.draw.circle(screen, BLACK,
-                           (self.x+90, self.y-30), 20)
-        pygame.draw.polygon(screen, BLACK,
-                            [(self.x, self.y+5), (self.x+50, self.y-20),
-                            (self.x+100, self.y+5)])
-        pygame.draw.polygon(screen, BLACK,
-                            [(self.x+100, self.y+5), (self.x+130, self.y-20),
-                            (self.x+175, self.y+5)])
-        pygame.draw.polygon(screen, BLACK,
-                            [(self.x+75, self.y-40),
-                            (self.x+80, self.y-55),
-                            (self.x+95, self.y-50)])
-        pygame.draw.polygon(screen, BLACK,
-                            [(self.x+90, self.y-50),
-                            (self.x+100, self.y-55),
-                            (self.x+105, self.y-40)])
-        pygame.draw.circle(screen, RED,
-                           (self.x+85, self.y-35), 4)
-        pygame.draw.circle(screen, RED,
-                           (self.x+95, self.y-35), 4)
-    # def move_bat(self):
-    #     self.y-=5
-    #     if self.y <= -1000:
-    #         self.y = 1000
+        self.display.blit(self.img, [self.x, self.y])
+        # for num in range(10):
+        #     pygame.draw.arc(screen, BLACK,
+        #                 [self.x, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+        #                 0, PI-0.5, 5)
+        #     pygame.draw.arc(screen, BLACK,
+        #                 [self.x+25, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+        #                 0, PI, 5)
+        #     pygame.draw.arc(screen, BLACK,
+        #                 [self.x+50, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+        #                 0.5, PI, 5)
+        #     pygame.draw.arc(screen, BLACK,
+        #                 [self.x+100, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+        #                 0, PI-0.5, 5)
+        #     pygame.draw.arc(screen, BLACK,
+        #                 [self.x+125, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+        #                 0, PI, 5)
+        #     pygame.draw.arc(screen, BLACK,
+        #                 [self.x+150, self.y+(0.8 * num), self.x-self.x+30, self.y-self.y+30],
+        #                 0.5, PI, 5)
+        #
+        # pygame.draw.circle(screen, BLACK,
+        #                    (self.x+90, self.y), 25)
+        # pygame.draw.circle(screen, BLACK,
+        #                    (self.x+90, self.y-30), 20)
+        # pygame.draw.polygon(screen, BLACK,
+        #                     [(self.x, self.y+5), (self.x+50, self.y-20),
+        #                     (self.x+100, self.y+5)])
+        # pygame.draw.polygon(screen, BLACK,
+        #                     [(self.x+100, self.y+5), (self.x+130, self.y-20),
+        #                     (self.x+175, self.y+5)])
+        # pygame.draw.polygon(screen, BLACK,
+        #                     [(self.x+75, self.y-40),
+        #                     (self.x+80, self.y-55),
+        #                     (self.x+95, self.y-50)])
+        # pygame.draw.polygon(screen, BLACK,
+        #                     [(self.x+90, self.y-50),
+        #                     (self.x+100, self.y-55),
+        #                     (self.x+105, self.y-40)])
+        # pygame.draw.circle(screen, RED,
+        #                    (self.x+85, self.y-35), 4)
+        # pygame.draw.circle(screen, RED,
+        #                    (self.x+95, self.y-35), 4)
     def is_collided(self, other):
-        if (self.x <= other.x <= self.x+self.width) and \
-        (self.y-60 <= other.y <= self.y-140+ self.width):
+        if (self.x+20 <= other.x <= self.x+self.width-20) and \
+        (self.y+20 <= other.y <= self.y + self.width-40):
 
             if other == fly:
                 self.score += self.score_add
@@ -234,6 +233,10 @@ pygame.init()
 
 screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("The Forest")
+bat_img = pygame.image.load("oie_mQ18gW90tuKu.png")
+game_over_sound = pygame.mixer.Sound("game_over_bad_chest.wav")
+background_img = pygame.image.load("oie_8153311knEW6vqY.png")
+
 
 clock = pygame.time.Clock()
 
@@ -252,7 +255,7 @@ trees2 = [Tree(random.randint(600, 1000), random.randint(0, 200), BLACK)
 background_trees2 = [Tree(random.randint(600, 1000), random.randint(0, 100), BACK_BLACK)
          for num in range(5)]
 
-bat = Bat(400, 1000,175, 1, 5)
+bat = Bat(screen, 400, 1000,175, 1, 5, bat_img)
 
 moon = Moon(200, 300, 1)
 
@@ -284,14 +287,14 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill(SKY)
-    pygame.draw.rect(screen, GROUND_BLACK, [0, 450, 1000, 800])
+    screen.blit(background_img, [0, 0])
+    # pygame.draw.rect(screen, GROUND_BLACK, [0, 450, 1000, 800])
     score = Score(pygame.time.get_ticks())
     #eyes.draw_eyes()
     #eyes.move_eyes_right()
 
-    moon.draw_moon()
-    moon.move_moon()
+    #moon.draw_moon()
+    #moon.move_moon()
 
     for tree in background_trees1:
         tree.draw_tree()
@@ -319,6 +322,7 @@ while running:
     score.draw_score(bat)
     score.draw_time()
     if int(score.time) > 30000:
+        game_over_sound.play()
         score.draw_game_over()
         score.draw_score(bat)
         timer = font.render(f"Time = {30000}", True, WHITE)
